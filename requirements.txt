@@ -3,6 +3,7 @@ joblib
 pandas
 numpy
 xgboost
-sklearn.preprocessing
+scikit-learn
 MinMaxScaler
 RobustScaler
+sklearn.preprocessing
