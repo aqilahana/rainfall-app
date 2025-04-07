@@ -1,0 +1,5 @@
+streamlit as st
+joblib
+pandas
+numpy
+base64

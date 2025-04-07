@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import joblib
 import base64
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 
 # Fungsi untuk konversi gambar ke base64 (digunakan untuk background)
 def get_base64(file_path):
