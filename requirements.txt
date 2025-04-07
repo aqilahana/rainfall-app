@@ -3,4 +3,4 @@ joblib
 pandas
 numpy
 xgboost
-sklearn
+sklearn.preprocessing
