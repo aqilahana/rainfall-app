@@ -4,5 +4,3 @@ pandas
 numpy
 xgboost
 scikit-learn
-MinMaxScaler
-RobustScaler
