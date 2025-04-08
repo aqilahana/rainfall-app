@@ -81,8 +81,8 @@ try:
     scaler_minmax = joblib.load("scaler_minmax.pkl")
 except FileNotFoundError:
     st.warning("Scaler files not found. Menggunakan default scaling yang mungkin memengaruhi akurasi prediksi.")
-    # scaler_robust = RobustScaler()
-    # scaler_minmax = MinMaxScaler()
+    scaler_robust = RobustScaler()
+    scaler_minmax = MinMaxScaler()
 
 # Convert to 2D array for normalization
 features = np.array([[tn, tx, tavg, rhavg, ss, ffx, dddx, ffavg]])
