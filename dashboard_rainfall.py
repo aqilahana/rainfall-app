@@ -129,7 +129,7 @@ if st.button("Prediksi Curah Hujan"):
         st.subheader(f"**Prediksi: {hasil}**")
 
         if gambar:
-            st.image(gambar, caption=hasil, use_container_width=True, width=150)
+            st.image(gambar, caption=hasil, use_container_width=True)
         else:
             st.warning("Gambar untuk hasil prediksi tidak ditemukan.")
     except Exception as e:
