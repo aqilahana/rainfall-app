@@ -34,11 +34,25 @@ with logo_col2:
     st.image("logo-unair.png", width=70)
 
 # Load the saved model
-model = joblib.load("xgboost_best_model.pkl")
+model = joblib.load("xgboost_best_model1.pkl")
 
 # Dashboard Title
 st.title("Dashboard Klasifikasi Curah Hujan dengan XGBoost")
-st.write("Masukkan parameter untuk memprediksi curah hujan")
+#st.write("Masukkan nilai hanya berupa angka saja")
+# Penjelasan tentang dashboard
+st.markdown("""
+### Tentang Dashboard Ini
+Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan beberapa parameter cuaca menggunakan model **XGBoost** yang telah dilatih sebelumnya.
+
+### Cara Menggunakan
+1. **Masukkan nilai parameter cuaca** yang tersedia di kolom input.
+2. Pastikan semua nilai diisi dengan angka, kecuali arah angin terbanyak yang bisa dipilih dari daftar.
+3. Setelah semua data diisi, tekan tombol **"Klasifikasi Curah Hujan"**.
+4. Hasil prediksi akan ditampilkan dalam bentuk **kategori curah hujan** beserta gambar representatif.
+
+> Catatan: Pastikan input berada dalam rentang wajar (misalnya suhu tidak negatif, kecepatan angin tidak ekstrem tinggi).
+""")
+
 
 # Wind direction mapping
 arah_angin_mapping = {
@@ -57,16 +71,16 @@ col1, col2 = st.columns(2)
 
 # User input features in two columns
 with col1:
-    tn = st.number_input("Suhu Minimum (°C)")
-    tx = st.number_input("Suhu Maksimum (°C)")
-    tavg = st.number_input("Suhu Rata-Rata (°C)")
-    rhavg = st.number_input("Kelembaban Rata-Rata (%)")
+    tn = st.number_input("Suhu Minimum (°C)", min_value=0.0, max_value=100.0)
+    tx = st.number_input("Suhu Maksimum (°C)", min_value=0.0, max_value=100.0)
+    tavg = st.number_input("Suhu Rata-Rata (°C)", min_value=0.0, max_value=100.0)
+    rhavg = st.number_input("Kelembaban Rata-Rata (%)", min_value=0.0, max_value=100.0)
 
 with col2:
-    ss = st.number_input("Lama Penyinaran Matahari (jam)")
+    ss = st.number_input("Lama Penyinaran Matahari (jam)", min_value=0.0, max_value=24.0)
     ffx = st.number_input("Kecepatan Angin Maksimum (m/s)")
     ffavg = st.number_input("Kecepatan Angin Rata-Rata (m/s)")
-    dddx0 = st.number_input("Arah Angin pada Kecepatan Maksimum (°)")
+    dddx0 = st.number_input("Arah Angin pada Kecepatan Maksimum (°)", min_value=0.0, max_value=360.0)
 
 # Convert common wind direction to numeric value
 dddcar0 = st.selectbox("Arah Angin Terbanyak", list(arah_angin_mapping.keys()))
@@ -112,7 +126,7 @@ gambar_hujan = {
 }
 
 # Tombol prediksi
-if st.button("Prediksi Curah Hujan"):
+if st.button("Klasifikasi Curah Hujan"):
     try:
         prediction = model.predict(input_data)[0]
 
@@ -126,10 +140,10 @@ if st.button("Prediksi Curah Hujan"):
         hasil = klasifikasi_hujan.get(prediction, "Kategori Tidak Diketahui")
         gambar = gambar_hujan.get(prediction, None)
 
-        st.subheader(f"**Prediksi: {hasil}**")
+        st.subheader(f"**Kategori: {hasil}**")
 
         if gambar:
-            st.image(gambar, caption=hasil, use_container_width=True)
+            st.image(gambar, caption=hasil, use_column_width=False, width=250)
         else:
             st.warning("Gambar untuk hasil prediksi tidak ditemukan.")
     except Exception as e:
