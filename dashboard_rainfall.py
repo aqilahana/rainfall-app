@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import plotly as plt
 import joblib
 import base64
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
@@ -37,7 +38,7 @@ with logo_col2:
 
 # Load model secara benar
 try:
-    model = joblib.load("best_rf.pkl")
+    model = joblib.load("best_xgb.pkl")
 except Exception as e:
     st.error(f"Gagal memuat model: {e}")
     st.stop()
@@ -47,10 +48,9 @@ st.title("Dashboard Klasifikasi Curah Hujan")
 #st.write("Masukkan nilai hanya berupa angka saja")
 # Penjelasan tentang dashboard
 st.markdown("""
-### Tentang Dashboard Ini
 Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan parameter cuaca menggunakan model **Random Forest** yang telah dilatih sebelumnya. 
 
-> Keterangan:
+##### Keterangan:
 > 1. Pastikan semua nilai diisi dengan angka, kecuali arah angin terbanyak yang bisa dipilih dari daftar.
 > 2. Pastikan tidak ada nilai parameter yang bernilai nol atau negatif
 > 3. Masukkan nilai sesuai dengan skala yang telah ditentukan dengan rentang nilai yang wajar
@@ -78,12 +78,12 @@ with col1:
     tn = st.number_input("Suhu Minimum (°C)", min_value=0.0, max_value=100.0)
     tx = st.number_input("Suhu Maksimum (°C)", min_value=0.0, max_value=100.0)
     tavg = st.number_input("Suhu Rata-Rata (°C)", min_value=0.0, max_value=100.0)
-    rhavg = st.number_input("Kelembaban Rata-Rata (%)", min_value=0.0, max_value=100.0)
+    rhavg = st.number_input("Kelembaban Rata-Rata (%)", min_value=0, max_value=100, step=1)
 
 with col2:
     ss = st.number_input("Lama Penyinaran Matahari (jam)", min_value=0.0, max_value=24.0)
-    ffx = st.number_input("Kecepatan Angin Maksimum (m/s)", min_value=0.0, max_value=100.0)
-    ffavg = st.number_input("Kecepatan Angin Rata-Rata (m/s)", min_value=0.0, max_value=100.0)
+    ffx = st.number_input("Kecepatan Angin Maksimum (m/s)", min_value=0, max_value=100, step=1)
+    ffavg = st.number_input("Kecepatan Angin Rata-Rata (m/s)", min_value=0, max_value=100, step=1)
     dddx0 = st.number_input("Arah Angin pada Kecepatan Maksimum (°)", min_value=0.0, max_value=360.0)
 
 # Convert common wind direction to numeric value
@@ -140,6 +140,25 @@ if st.button("Klasifikasi Curah Hujan"):
             }
             hasil = klasifikasi_hujan.get(prediction, "Kategori Tidak Diketahui")
             st.subheader(f"**Kategori: {hasil}**")
+
         except Exception as e:
             st.error(f"Error dalam melakukan prediksi: {e}")
             st.info("Pastikan semua nilai input sudah diisi dengan benar.")
+
+
+st.markdown("""
+**Deskripsi Singkat:**
+
+- 🌦️ **Hujan Sangat Ringan** - Gerimis sebentar, tidak mengganggu aktivitas luar.
+
+- 🌧️ **Hujan Ringan** -  Hujan kecil yang terjadi terus menerus selama beberapa jam.
+
+- 🌧️ **Hujan Sedang** - Hujan mulai deras, bisa menyebabkan genangan kecil.
+
+- ⛈️ **Hujan Lebat** - Hujan deras, bisa menyebabkan banjir kecil di beberapa tempat.
+
+- 🌪️ **Hujan Sangat Lebat** - Badai deras, biasanya disertai petir dan angin kencang.
+""")
+
+
+
