@@ -44,7 +44,7 @@ with logo_col2:
 
 # ✅ Load model secara benar
 try:
-    model = joblib.load("best_rf.pkl")
+    model = joblib.load("best_xgb.pkl")
 except Exception as e:
     st.error(f"Gagal memuat model: {e}")
     st.stop()
