@@ -3,7 +3,8 @@ import numpy as np
 import joblib
 import base64
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
-from sklearn.ensemble import RandomForestClassifier
+# from sklearn.ensemble import RandomForestClassifier
+# pip install scikit-learn==1.2.2
 
 # Fungsi untuk konversi gambar ke base64 (digunakan untuk background)
 def get_base64(file_path):
@@ -35,7 +36,7 @@ with logo_col2:
     st.image("logo-unair.png", width=70)
 
 # Load the saved model
-model = joblib.load("best_rf_new1.pkl")
+model = joblib.load("best_rf.pkl")
 
 # Dashboard Title
 st.title("Dashboard Klasifikasi Curah Hujan")
