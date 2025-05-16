@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import joblib
+import pickle
 import base64
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
 # from sklearn.ensemble import RandomForestClassifier
@@ -36,7 +37,10 @@ with logo_col2:
     st.image("logo-unair.png", width=70)
 
 # Load the saved model
-model = joblib.load("best_xgb.pkl")
+model_path = "best_rf.pkl"
+with open(model_path, 'rb') as file:
+    model = pickle.load(file)
+# model = joblib.load("best_rf.pkl")
 
 # Dashboard Title
 st.title("Dashboard Klasifikasi Curah Hujan")
