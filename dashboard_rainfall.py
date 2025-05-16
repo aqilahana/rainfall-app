@@ -1,6 +1,5 @@
 import streamlit as st
 import numpy as np
-import plotly as plt
 import joblib
 import base64
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
@@ -40,7 +39,7 @@ with logo_col2:
 try:
     model = joblib.load("best_xgb.pkl")
 except Exception as e:
-    st.error(f"Gagal memuat model {e}")
+    st.error(f"Gagal memuat model: {e}")
     st.stop()
 
 # Dashboard Title
