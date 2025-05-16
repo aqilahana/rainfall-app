@@ -37,10 +37,17 @@ with logo_col2:
     st.image("logo-unair.png", width=70)
 
 # Load the saved model
-model_path = "best_rf.pkl"
-with open(model_path, 'rb') as file:
-    model = pickle.load(file)
+# model_path = "best_rf.pkl"
+# with open(model_path, 'rb') as file:
+#     model = pickle.load(file)
 # model = joblib.load("best_rf.pkl")
+
+# ✅ Load model secara benar
+try:
+    model = joblib.load("best_rf.pkl")
+except Exception as e:
+    st.error(f"Gagal memuat model: {e}")
+    st.stop()
 
 # Dashboard Title
 st.title("Dashboard Klasifikasi Curah Hujan")
