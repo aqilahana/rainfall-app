@@ -40,7 +40,7 @@ with logo_col2:
 try:
     model = joblib.load("best_xgb.pkl")
 except Exception as e:
-    st.error(f"Gagal memuat model: {e}")
+    st.error(f"Gagal memuat model {e}")
     st.stop()
 
 # Dashboard Title
