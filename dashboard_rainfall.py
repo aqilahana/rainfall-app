@@ -1,10 +1,9 @@
 import streamlit as st
 import numpy as np
 import joblib
-import pickle
 import base64
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
-# from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
 # pip install scikit-learn==1.2.2
 
 # Fungsi untuk konversi gambar ke base64 (digunakan untuk background)
@@ -38,7 +37,7 @@ with logo_col2:
 
 # Load model secara benar
 try:
-    model = joblib.load("best_xgb.pkl")
+    model = joblib.load("best_rf.pkl")
 except Exception as e:
     st.error(f"Gagal memuat model: {e}")
     st.stop()
@@ -49,15 +48,13 @@ st.title("Dashboard Klasifikasi Curah Hujan")
 # Penjelasan tentang dashboard
 st.markdown("""
 ### Tentang Dashboard Ini
-Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan beberapa parameter cuaca menggunakan model **Random Forest** yang telah dilatih sebelumnya.
+Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan parameter cuaca menggunakan model **Random Forest** yang telah dilatih sebelumnya. 
 
-### Cara Menggunakan
-1. **Masukkan nilai parameter cuaca** yang tersedia di kolom input.
-2. Pastikan semua nilai diisi dengan angka, kecuali arah angin terbanyak yang bisa dipilih dari daftar.
-3. Setelah semua data diisi, tekan tombol **"Klasifikasi Curah Hujan"**.
-4. Hasil prediksi akan ditampilkan dalam bentuk **kategori curah hujan** beserta gambar representatif.
-
-> Catatan: Pastikan input berada dalam rentang wajar (misalnya suhu tidak negatif, kecepatan angin tidak ekstrem tinggi).
+> Keterangan:
+> 1. Pastikan semua nilai diisi dengan angka, kecuali arah angin terbanyak yang bisa dipilih dari daftar.
+> 2. Pastikan tidak ada nilai parameter yang bernilai nol atau negatif
+> 3. Masukkan nilai sesuai dengan skala yang telah ditentukan dengan rentang nilai yang wajar
+> 4. Setelah semua data diisi, tekan tombol **"Klasifikasi Curah Hujan"**
 """)
 
 
@@ -85,8 +82,8 @@ with col1:
 
 with col2:
     ss = st.number_input("Lama Penyinaran Matahari (jam)", min_value=0.0, max_value=24.0)
-    ffx = st.number_input("Kecepatan Angin Maksimum (m/s)")
-    ffavg = st.number_input("Kecepatan Angin Rata-Rata (m/s)")
+    ffx = st.number_input("Kecepatan Angin Maksimum (m/s)", min_value=0.0, max_value=100.0)
+    ffavg = st.number_input("Kecepatan Angin Rata-Rata (m/s)", min_value=0.0, max_value=100.0)
     dddx0 = st.number_input("Arah Angin pada Kecepatan Maksimum (°)", min_value=0.0, max_value=360.0)
 
 # Convert common wind direction to numeric value
@@ -116,9 +113,9 @@ try:
 
     other_features = features[:, [3, 4, 6]]
     scaled_other = scaler_minmax.transform(other_features)
-    features[:, [3, 4, 6]] = scaled_other
+    # features[:, [3, 4, 6]] = scaled_other
 except:
-    st.error("Terjadi kesalahan saat normalisasi fitur. Pastikan nilai input dalam rentang yang wajar.")
+    st.error(f"Kesalahan normalisasi: {e}")
 
 # Gabungkan dengan dddcar (sudah numerik)
 input_data = np.hstack([features, np.array([[dddcar]])])
@@ -134,7 +131,6 @@ if st.button("Klasifikasi Curah Hujan"):
     else:
         try:
             prediction = model.predict(input_data)[0]
-
             klasifikasi_hujan = {
                 0: "Hujan Sangat Ringan",
                 1: "Hujan Ringan",
@@ -144,7 +140,6 @@ if st.button("Klasifikasi Curah Hujan"):
             }
             hasil = klasifikasi_hujan.get(prediction, "Kategori Tidak Diketahui")
             st.subheader(f"**Kategori: {hasil}**")
-
         except Exception as e:
             st.error(f"Error dalam melakukan prediksi: {e}")
             st.info("Pastikan semua nilai input sudah diisi dengan benar.")
