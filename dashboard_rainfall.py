@@ -36,13 +36,7 @@ with logo_col1:
 with logo_col2:
     st.image("logo-unair.png", width=70)
 
-# Load the saved model
-# model_path = "best_rf.pkl"
-# with open(model_path, 'rb') as file:
-#     model = pickle.load(file)
-# model = joblib.load("best_rf.pkl")
-
-# ✅ Load model secara benar
+# Load model secara benar
 try:
     model = joblib.load("best_xgb.pkl")
 except Exception as e:
@@ -129,36 +123,28 @@ except:
 # Gabungkan dengan dddcar (sudah numerik)
 input_data = np.hstack([features, np.array([[dddcar]])])
 
-# # Dictionary untuk gambar klasifikasi hujan
-# gambar_hujan = {
-#     0: "tidak_hujan.png",
-#     1: "hujan_sangat_ringan.png",
-#     2: "hujan_ringan.png",
-#     3: "hujan_sedang.png",
-#     4: "hujan_lebat.png"
-# }
+# Validasi input: jika ada nilai yang masih 0
+input_cek = [tn, tx, tavg, rhavg, ss, ffx, ffavg, dddx0]
+jika_ada_nol = any(nilai == 0 for nilai in input_cek)
 
 # Tombol prediksi
 if st.button("Klasifikasi Curah Hujan"):
-    try:
-        prediction = model.predict(input_data)[0]
+    if jika_ada_nol:
+        st.warning("⚠️ Silakan isi semua parameter terlebih dahulu sebelum melakukan klasifikasi. Nilai tidak boleh nol.")
+    else:
+        try:
+            prediction = model.predict(input_data)[0]
 
-        klasifikasi_hujan = {
-            0: "Hujan Sangat Ringan",
-            1: "Hujan Ringan",
-            2: "Hujan Sedang",
-            3: "Hujan Lebat",
-            4: "Hujan Sangat Lebat"
-        }
-        hasil = klasifikasi_hujan.get(prediction, "Kategori Tidak Diketahui")
-        # gambar = gambar_hujan.get(prediction, None)
+            klasifikasi_hujan = {
+                0: "Hujan Sangat Ringan",
+                1: "Hujan Ringan",
+                2: "Hujan Sedang",
+                3: "Hujan Lebat",
+                4: "Hujan Sangat Lebat"
+            }
+            hasil = klasifikasi_hujan.get(prediction, "Kategori Tidak Diketahui")
+            st.subheader(f"**Kategori: {hasil}**")
 
-        st.subheader(f"**Kategori: {hasil}**")
-
-        # if gambar:
-        #     st.image(gambar, caption=hasil, use_column_width=False, width=250)
-        # else:
-        #     st.warning("Gambar untuk hasil prediksi tidak ditemukan.")
-    except Exception as e:
-        st.error(f"Error dalam melakukan prediksi: {e}")
-        st.info("Pastikan semua nilai input sudah diisi dengan benar.")
+        except Exception as e:
+            st.error(f"Error dalam melakukan prediksi: {e}")
+            st.info("Pastikan semua nilai input sudah diisi dengan benar.")
