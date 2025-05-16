@@ -34,15 +34,15 @@ with logo_col2:
     st.image("logo-unair.png", width=70)
 
 # Load the saved model
-model = joblib.load("xgboost_best_model1.pkl")
+model = joblib.load("best_rf_new.pkl")
 
 # Dashboard Title
-st.title("Dashboard Klasifikasi Curah Hujan dengan XGBoost")
+st.title("Dashboard Klasifikasi Curah Hujan")
 #st.write("Masukkan nilai hanya berupa angka saja")
 # Penjelasan tentang dashboard
 st.markdown("""
 ### Tentang Dashboard Ini
-Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan beberapa parameter cuaca menggunakan model **XGBoost** yang telah dilatih sebelumnya.
+Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan beberapa parameter cuaca menggunakan model **Random Forest** yang telah dilatih sebelumnya.
 
 ### Cara Menggunakan
 1. **Masukkan nilai parameter cuaca** yang tersedia di kolom input.
@@ -134,8 +134,8 @@ if st.button("Klasifikasi Curah Hujan"):
             0: "Hujan Sangat Ringan",
             1: "Hujan Ringan",
             2: "Hujan Sedang",
-            3: "Hujan Lebat"
-            # 4: "Hujan Lebat"
+            3: "Hujan Lebat",
+            4: "Hujan Sangat Lebat"
         }
         hasil = klasifikasi_hujan.get(prediction, "Kategori Tidak Diketahui")
         # gambar = gambar_hujan.get(prediction, None)
