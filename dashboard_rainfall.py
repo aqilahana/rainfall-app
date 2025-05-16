@@ -35,7 +35,7 @@ with logo_col2:
     st.image("logo-unair.png", width=70)
 
 # Load the saved model
-model = joblib.load("best_rf_new.pkl")
+model = joblib.load("best_rf_new1.pkl")
 
 # Dashboard Title
 st.title("Dashboard Klasifikasi Curah Hujan")
