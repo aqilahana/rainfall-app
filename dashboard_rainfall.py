@@ -3,6 +3,7 @@ import numpy as np
 import joblib
 import base64
 from sklearn.preprocessing import MinMaxScaler, RobustScaler
+from sklearn.ensemble import RandomForestClassifier
 
 # Fungsi untuk konversi gambar ke base64 (digunakan untuk background)
 def get_base64(file_path):
