@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import joblib
 import base64
-from sklearn.preprocessing import MinMaxScaler, RobustScaler
+# from sklearn.preprocessing import MinMaxScaler, RobustScaler
 from sklearn.ensemble import RandomForestClassifier
 # pip install scikit-learn==1.2.2
 
@@ -47,7 +47,7 @@ st.title("Dashboard Klasifikasi Curah Hujan")
 #st.write("Masukkan nilai hanya berupa angka saja")
 # Penjelasan tentang dashboard
 st.markdown("""
-Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan parameter cuaca menggunakan model **Random Forest** yang telah dilatih sebelumnya. 
+Dashboard ini merupakan alat bantu untuk memprediksi **kategori curah hujan harian** berdasarkan parameter cuaca menggunakan model **XGBoost** yang telah dilatih sebelumnya. 
 
 ##### Keterangan:
 > 1. Pastikan semua nilai diisi dengan angka, kecuali arah angin terbanyak yang bisa dipilih dari daftar.
@@ -98,8 +98,8 @@ try:
     scaler_minmax = joblib.load("scaler_minmax.pkl")
 except FileNotFoundError:
     st.warning("Scaler files not found. Menggunakan default scaling yang mungkin memengaruhi akurasi prediksi.")
-    scaler_robust = RobustScaler()
-    scaler_minmax = MinMaxScaler()
+    # scaler_robust = RobustScaler()
+    # scaler_minmax = MinMaxScaler()
 
 # Convert to 2D array for normalization
 features = np.array([[tn, tx, tavg, rhavg, ss, ffx, dddx, ffavg]])
