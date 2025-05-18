@@ -3,4 +3,3 @@ joblib
 pandas
 numpy
 xgboost
-sklearn
