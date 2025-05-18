@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import joblib
 import base64
-# from sklearn.preprocessing import MinMaxScaler, RobustScaler
+from sklearn.preprocessing import MinMaxScaler, RobustScaler
 # from sklearn.ensemble import RandomForestClassifier
 # pip install scikit-learn==1.2.2
 
@@ -98,8 +98,8 @@ try:
     scaler_minmax = joblib.load("scaler_minmax.pkl")
 except FileNotFoundError:
     st.warning("Scaler files not found. Menggunakan default scaling yang mungkin memengaruhi akurasi prediksi.")
-    # scaler_robust = RobustScaler()
-    # scaler_minmax = MinMaxScaler()
+    scaler_robust = RobustScaler()
+    scaler_minmax = MinMaxScaler()
 
 # Convert to 2D array for normalization
 features = np.array([[tn, tx, tavg, rhavg, ss, ffx, dddx, ffavg]])
@@ -112,7 +112,7 @@ try:
 
     other_features = features[:, [3, 4, 6]]
     scaled_other = scaler_minmax.transform(other_features)
-    # features[:, [3, 4, 6]] = scaled_other
+    features[:, [3, 4, 6]] = scaled_other
 except:
     st.error(f"Kesalahan normalisasi: {e}")
 
